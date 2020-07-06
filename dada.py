@@ -2,8 +2,9 @@
 
 import argparse
 import sys
+import config
 
-from localfiles import find_files_with_unwanted_chars_in_name
+from localfiles import find_files_with_unwanted_chars_in_name, create_md5_file_list
 
 class DaDa(object):
 
@@ -18,11 +19,15 @@ List of dada commands:
                             with unwanted characters
    local-validate           Check if the local files have the checksum stored
                             locally
+   local-md5-filelist       Creates localfilelist.csv with md5 hashes
 ''')
         parser.add_argument('command', help='Subcommand to run')
         # parse_args defaults to [1:] for args, but you need to
         # exclude the rest of the args too, or validation will fail
         args = parser.parse_args(sys.argv[1:2])
+
+        config.read_config()
+
         dispatchMethod = args.command.replace('-','_')
         if not hasattr(self, dispatchMethod):
             print('Unrecognized command')
@@ -54,6 +59,19 @@ List of dada commands:
         parser.add_argument('repository')
         args = parser.parse_args(sys.argv[2:])
         print('Running dada local-validate, repository=%s' % args.repository)
+
+    def local_md5_filelist(self):
+        parser = argparse.ArgumentParser(description='Create md5 checksums in the local path folder')
+        # NOT prefixing the argument with -- means it's not optional
+        parser.add_argument('path')#, action='store', dest='folder',
+#                    help='name of the folder')
+        args = parser.parse_args(sys.argv[2:])
+        print('Running dada local-md5-filelist, path=%s' % args.path)
+        cleaned_path = args.path.replace('\\','/')
+        if not cleaned_path.endswith('/'):
+            cleaned_path = f'{cleaned_path}/'
+        create_md5_file_list(cleaned_path)
+
 
 if __name__ == '__main__':
     DaDa()
