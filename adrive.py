@@ -28,8 +28,9 @@ def walk_dir(dir, session):
                 except:
                     print('exception, retrying...')
             md5_dict = json.loads(response.text)
-            print(f'id {file_line[0]} name {file_line[2]} type {file_line[3]} md5 {md5_dict['md5']}')
-            allfiles.append((md5_dict['md5'], dir, file_line[2]))
+            md5_digest = md5_dict['md5']
+            print(f'id {file_line[0]} name {file_line[2]} type {file_line[3]} md5 {md5_digest}')
+            allfiles.append((md5_digest, dir, file_line[2]))
 
 def login():
     secretsconfig = configparser.ConfigParser()
@@ -42,8 +43,14 @@ def login():
         'login[passwrd]':secretsconfig['adrive']['password']
         }
     session.post('https://www.adrive.com/login/login', data=payload, headers=postHeaders)
+    return session
+
+
+def login_and_walk_dir():
+    session = login()
+
     walk_dir('/', session)
 
-    with open('adrive_filelist.csv','w+') as handle:
+    with open('adrive_filelist.csv','w+',encoding='utf-8') as handle:
         for f in allfiles:
             handle.write(f'{f[0]};{f[1]};{f[2]}\n')

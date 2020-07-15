@@ -5,6 +5,8 @@ import sys
 import config
 
 from localfiles import find_files_with_unwanted_chars_in_name, create_md5_file_list
+from adrive import login_and_walk_dir
+from comparison import are_all_local_files_in_remote
 
 class DaDa(object):
 
@@ -19,7 +21,10 @@ List of dada commands:
                             with unwanted characters
    local-validate           Check if the local files have the checksum stored
                             locally
-   local-md5-filelist       Creates localfilelist.csv with md5 hashes
+   local-md5-filelist       Creates local_filelist.csv with md5 hashes
+   remote-create-filelist   Creates adrive_filelist.csv with md5 hashes
+   are-local-in-remote      Check if all local files exist in remote
+                            This command only checks filelists
 ''')
         parser.add_argument('command', help='Subcommand to run')
         # parse_args defaults to [1:] for args, but you need to
@@ -72,6 +77,11 @@ List of dada commands:
             cleaned_path = f'{cleaned_path}/'
         create_md5_file_list(cleaned_path)
 
+    def remote_create_filelist(self):
+        login_and_walk_dir()
+
+    def are_local_in_remote(self):
+        are_all_local_files_in_remote()
 
 if __name__ == '__main__':
     DaDa()
