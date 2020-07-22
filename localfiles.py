@@ -18,7 +18,12 @@ def create_md5_file_list(dirname):
                 file_with_path = os.path.join(dirpath, filename)
                 md5_hash = hashlib.md5()
                 with open(file_with_path, "rb") as handle:
-                    md5_hash.update(handle.read())
+                    while True:
+                        block = handle.read(10485760)
+                        if block:
+                            md5_hash.update(block)
+                        else:
+                            break
                 digest = md5_hash.hexdigest()
                 localdirpath = dirpath[len(dirname)-1:].replace('\\','/') + '/'
                 filelisthandle.write(f'{digest};{localdirpath};{filename}\n')
