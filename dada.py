@@ -7,6 +7,7 @@ import config
 from localfiles import find_files_with_unwanted_chars_in_name, create_md5_file_list
 from adrive import login_and_walk_dir
 from comparison import are_all_local_files_in_remote, are_identical
+from encryption import encrypt
 
 class DaDa(object):
 
@@ -26,6 +27,8 @@ List of dada commands:
    are-local-in-remote      Check if all local files exist in remote
                             This command only checks filelists
    are-identical            Checks wheter two filelists contain the same
+   encrypt                  encrypts the files according to the 
+                            encryptedfiles.txt
 ''')
         parser.add_argument('command', help='Subcommand to run')
         # parse_args defaults to [1:] for args, but you need to
@@ -86,6 +89,16 @@ List of dada commands:
 
     def are_identical(self):
         are_identical()
+    
+    def encrypt(self):
+        parser = argparse.ArgumentParser(description='Encrypt the files listed in encrypted_files.txt')
+        parser.add_argument('path')
+        args = parser.parse_args(sys.argv[2:])
+        print('Running dada encrypt, path=%s' % args.path)
+        cleaned_path = args.path.replace('\\','/')
+        if not cleaned_path.endswith('/'):
+            cleaned_path = f'{cleaned_path}/'
+        encrypt(cleaned_path)        
 
 if __name__ == '__main__':
     DaDa()
