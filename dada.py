@@ -6,7 +6,7 @@ import config
 
 from localfiles import find_files_with_unwanted_chars_in_name, create_md5_file_list
 from adrive import login_and_walk_dir
-from comparison import are_all_local_files_in_remote
+from comparison import are_all_local_files_in_remote, are_identical
 
 class DaDa(object):
 
@@ -25,6 +25,7 @@ List of dada commands:
    remote-create-filelist   Creates adrive_filelist.csv with md5 hashes
    are-local-in-remote      Check if all local files exist in remote
                             This command only checks filelists
+   are-identical            Checks wheter two filelists contain the same
 ''')
         parser.add_argument('command', help='Subcommand to run')
         # parse_args defaults to [1:] for args, but you need to
@@ -82,6 +83,9 @@ List of dada commands:
 
     def are_local_in_remote(self):
         are_all_local_files_in_remote()
+
+    def are_identical(self):
+        are_identical()
 
 if __name__ == '__main__':
     DaDa()
