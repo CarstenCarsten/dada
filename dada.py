@@ -6,7 +6,7 @@ import config
 
 from localfiles import find_files_with_unwanted_chars_in_name, create_md5_file_list
 from adrive import login_and_walk_dir
-from comparison import are_all_local_files_in_remote, are_identical
+from comparison import are_all_local_files_in_remote, are_identical, find_needle_in_haystack
 from encryption import encrypt
 
 class DaDa(object):
@@ -29,6 +29,9 @@ List of dada commands:
    are-identical            Checks wheter two filelists contain the same
    encrypt                  encrypts the files according to the 
                             encryptedfiles.txt
+   find-files-in-subfolders Goes through every file in the current directory
+                            and checks wether this file exists in another
+                            directory, or in that subfolder
 ''')
         parser.add_argument('command', help='Subcommand to run')
         # parse_args defaults to [1:] for args, but you need to
@@ -98,7 +101,20 @@ List of dada commands:
         cleaned_path = args.path.replace('\\','/')
         if not cleaned_path.endswith('/'):
             cleaned_path = f'{cleaned_path}/'
-        encrypt(cleaned_path)        
+        encrypt(cleaned_path)
+
+    def find_files_in_subfolders(self):
+        parser = argparse.ArgumentParser(description='Takes every file in the needle directory and looks for them in the haystack folder and subfolders')
+        parser.add_argument('path_needle')
+        parser.add_argument('path_haystack')
+        args = parser.parse_args(sys.argv[2:])
+        needle_path = args.path_needle.replace('\\','/')
+        haystack_path = args.path_haystack.replace('\\','/')
+        if not needle_path.endswith('/'):
+            needle_path = f'{needle_path}/'
+        if not haystack_path.endswith('/'):
+            haystack_path = f'{haystack_path}/'
+
 
 if __name__ == '__main__':
     DaDa()

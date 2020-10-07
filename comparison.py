@@ -50,4 +50,9 @@ def are_identical():
     else:
         print('filelists have different hashes!')
         show_difference(local_md5, remote_md5, local_filename, remote_filename)
+
+def find_needle_in_haystack():
+    # https://stackoverflow.com/questions/26712949/python-best-way-to-find-similar-images-in-a-directory
+    # https://github.com/jterrace/pyssim
+    # 
 	
