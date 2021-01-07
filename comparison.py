@@ -40,19 +40,42 @@ def are_all_local_files_in_remote():
         print('The difference is:')
         print(diff)
 
-def are_identical():
-    local_filename = 'local_filelist.csv'
-    remote_filename = 'adrive_filelist.csv'
-    local_md5 = get_md5_set(local_filename)
-    remote_md5 = get_md5_set(remote_filename)
-    if collections.Counter(local_md5) == collections.Counter(remote_md5):
+def are_identical(leftfile, rightfile):
+    left_md5 = get_md5_set(leftfile)
+    right_md5 = get_md5_set(rightfile)
+    if collections.Counter(left_md5) == collections.Counter(right_md5):
         print('filelists contain same hashes')
     else:
         print('filelists have different hashes!')
-        show_difference(local_md5, remote_md5, local_filename, remote_filename)
+        show_difference(left_md5, right_md5, leftfile, rightfile)
+
+def move_file_into_mem(filename):
+    thelist = []
+    with open(filename, 'r', encoding='utf-8') as file_handle:
+        for line in file_handle.readlines():
+            splits = line.split(';')
+            thelist.append((splits[0], splits[1], splits[2].rstrip('\n').rstrip('\r\n')))
+    return thelist
+
+
+def are_left_in_right(leftfile, rightfile):
+    leftlist = move_file_into_mem(leftfile)
+    rightlist = move_file_into_mem(rightfile)
+    i = 0
+    for entry in leftlist:
+        i = i + 1
+        found = False
+        for candidate in rightlist:
+            if candidate[0] == entry[0] and candidate[1] == entry[1] and candidate[2] == entry[2]:
+                found = True
+                break
+        if not found:
+            print(f' Missing : {entry[0]}  {entry[1]}  {entry[2]}')
+    print(f'Processed {i} entries')
+
 
 def find_needle_in_haystack():
     # https://stackoverflow.com/questions/26712949/python-best-way-to-find-similar-images-in-a-directory
     # https://github.com/jterrace/pyssim
     # 
-	
+	None

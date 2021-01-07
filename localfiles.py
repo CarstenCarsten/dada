@@ -1,6 +1,7 @@
 import os
 import config
 import hashlib
+import datetime
 
 def find_files_with_unwanted_chars_in_name(dirName):
     configset = set(config.configuration['valid_chars'])
@@ -11,7 +12,8 @@ def find_files_with_unwanted_chars_in_name(dirName):
                 print(os.path.join(dirpath, fileName))
 
 def create_md5_file_list(dirname):
-    with open('local_filelist.csv', 'w+',encoding='utf-8') as filelisthandle:
+    filename = 'local_' + datetime.datetime.now().strftime('%Y-%m-%d-%H-%M') + '_filelist.csv'
+    with open(filename, 'w+',encoding='utf-8') as filelisthandle:
         # Second parameter are the foldernames
         for (dirpath, _, filenames) in os.walk(dirname):
             for filename in filenames:

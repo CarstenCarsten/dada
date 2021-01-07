@@ -6,7 +6,7 @@ import config
 
 from localfiles import find_files_with_unwanted_chars_in_name, create_md5_file_list
 from adrive import login_and_walk_dir
-from comparison import are_all_local_files_in_remote, are_identical, find_needle_in_haystack
+from comparison import are_all_local_files_in_remote, are_identical, find_needle_in_haystack, are_left_in_right
 from encryption import encrypt
 
 class DaDa(object):
@@ -26,7 +26,10 @@ List of dada commands:
    remote-create-filelist   Creates adrive_filelist.csv with md5 hashes
    are-local-in-remote      Check if all local files exist in remote
                             This command only checks filelists
+   are-left-in-right        Give two filelists, check if all left entries are
+                            in the right filelist
    are-identical            Checks wheter two filelists contain the same
+                            I FORGOT WHY I NEED THIS FUNCTION
    encrypt                  encrypts the files according to the 
                             encryptedfiles.txt
    find-files-in-subfolders Goes through every file in the current directory
@@ -91,8 +94,19 @@ List of dada commands:
         are_all_local_files_in_remote()
 
     def are_identical(self):
-        are_identical()
-    
+        parser = argparse.ArgumentParser(description='Check if two filelists are identical')
+        parser.add_argument('leftfile')
+        parser.add_argument('rightfile')
+        args = parser.parse_args(sys.argv[2:])
+        are_identical(args.leftfile, args.rightfile)
+
+    def are_left_in_right(self):
+        parser = argparse.ArgumentParser(description='Check if alle entries from the left filelist are in the right')
+        parser.add_argument('leftfile')
+        parser.add_argument('rightfile')
+        args = parser.parse_args(sys.argv[2:])
+        are_left_in_right(args.leftfile, args.rightfile)
+
     def encrypt(self):
         parser = argparse.ArgumentParser(description='Encrypt the files listed in encrypted_files.txt')
         parser.add_argument('path')
