@@ -1,6 +1,8 @@
 import configparser
 import requests
 import json
+import sys
+import datetime
 
 allfiles = []
 
@@ -36,6 +38,10 @@ def login():
     secretsconfig = configparser.ConfigParser()
     secretsconfig.read('secrets.ini')
 
+    if not 'adrive' in secretsconfig:
+        print('could not find adrive entry in secrets.ini')
+        sys.exit(1)
+
     session = requests.Session()
     postHeaders = {}
     payload = {'login[referrer]':'',
@@ -51,6 +57,8 @@ def login_and_walk_dir():
 
     walk_dir('/', session)
 
-    with open('adrive_filelist.csv','w+',encoding='utf-8') as handle:
+    csvFilename = 'adrive_' + datetime.datetime.now().strftime('%Y-%m-%d-%H-%M') + '_filelist.csv'
+
+    with open(csvFilename,'w+',encoding='utf-8') as handle:
         for f in allfiles:
             handle.write(f'{f[0]};{f[1]};{f[2]}\n')

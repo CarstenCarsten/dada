@@ -66,11 +66,14 @@ def are_left_in_right(leftfile, rightfile):
         i = i + 1
         found = False
         for candidate in rightlist:
-            if candidate[0] == entry[0] and candidate[1] == entry[1] and candidate[2] == entry[2]:
-                found = True
-                break
+            if candidate[0] == entry[0]:
+                sameChecksumFolder = candidate[1]
+                sameChecksumFilename = candidate[2]
+                if candidate[1] == entry[1] and candidate[2] == entry[2]:
+                    found = True
+                    break
         if not found:
-            print(f' Missing : {entry[0]}  {entry[1]}  {entry[2]}')
+            print(f' Missing : {entry[0]}  {entry[1]}  {entry[2]} Found same checksum folder {sameChecksumFolder} same filename {sameChecksumFilename}')
     print(f'Processed {i} entries')
 
 

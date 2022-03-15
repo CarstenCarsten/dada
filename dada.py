@@ -26,9 +26,9 @@ List of dada commands:
    remote-create-filelist   Creates adrive_filelist.csv with md5 hashes
    are-local-in-remote      Check if all local files exist in remote
                             This command only checks filelists
-   are-left-in-right        Give two filelists, check if all left entries are
+   are-left-in-right        Given two filelists, check if all left entries are
                             in the right filelist
-   are-identical            Checks wheter two filelists contain the same
+   are-identical            Checks whether two filelists contain the same
                             I FORGOT WHY I NEED THIS FUNCTION
    encrypt                  encrypts the files according to the 
                             encryptedfiles.txt
